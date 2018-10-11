@@ -4,16 +4,16 @@ import android.content.Context;
         import android.database.sqlite.SQLiteDatabase;
         import android.database.sqlite.SQLiteOpenHelper;
 
-
+import data.InventoryContract.InventoryEntry;
 /**
- * Database helper for Pets app. Manages database creation and version management.
+ * Database helper for My Inventory app. Manages database creation and version management.
  */
 public class InventoryDbHelper extends SQLiteOpenHelper {
 
     public static final String LOG_TAG = InventoryDbHelper.class.getSimpleName();
 
     /** Name of the database file */
-    private static final String DATABASE_NAME = "inventory.db";
+    private static final String DATABASE_NAME = "mayat.db";
 
     /**
      * Database version. If you change the database schema, you must increment the database version.
@@ -34,17 +34,17 @@ public class InventoryDbHelper extends SQLiteOpenHelper {
      */
     @Override
     public void onCreate(SQLiteDatabase db) {
-        // Create a String that contains the SQL statement to create the inventory table
-        String SQL_CREATE_INVENTORY_TABLE =  "CREATE TABLE " + InventoryContract.InventoryEntry.TABLE_NAME + " ("
-                + InventoryContract.InventoryEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
-                + InventoryContract.InventoryEntry.COLUMN_PRODUCT_NAME + " TEXT NOT NULL, "
-                + InventoryContract.InventoryEntry.COLUMN_PRODUCT_PRICE + " INTEGER NOT NULL, "
-                + InventoryContract.InventoryEntry.COLUMN_QUANTITY + " INTEGER NOT NULL DEFAULT 0,"
-                + InventoryContract.InventoryEntry.COLUMN_SUPPLIER_NAME + " TEXT NOT NULL,"
-                + InventoryContract.InventoryEntry.COLUMN_SUPPLIER_PHONE + " INTEGER NOT NULL DEFAULT 0);";
+        // Create a String that contains the SQL statement to create the pets table
+        String SQL_CREATE_PRODUCTS_TABLE =  "CREATE TABLE " + InventoryEntry.TABLE_NAME + " ("
+                + InventoryEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+                + InventoryEntry.COLUMN_PRODUCT_NAME + " TEXT NOT NULL, "
+                + InventoryEntry.COLUMN_PRODUCT_PRICE + " INTEGER, "
+                + InventoryEntry.COLUMN_QUANTITY + " INTEGER NOT NULL DEFAULT 0, "
+                + InventoryEntry.COLUMN_SUPPLIER_NAME + " INTEGER NOT NULL, "
+                + InventoryEntry.COLUMN_SUPPLIER_PHONE + " INTEGER );";
 
         // Execute the SQL statement
-        db.execSQL(SQL_CREATE_INVENTORY_TABLE);
+        db.execSQL(SQL_CREATE_PRODUCTS_TABLE);
     }
 
     /**
@@ -55,4 +55,3 @@ public class InventoryDbHelper extends SQLiteOpenHelper {
         // The database is still at version 1, so there's nothing to do be done here.
     }
 }
-

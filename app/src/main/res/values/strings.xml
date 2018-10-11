@@ -21,10 +21,31 @@
     <string name="hint_supplier_phone">Supplier Phone</string>
 
 
-
-
     <!-- select Supplier-->
     <string name="supplier_Jones">Bob Supplies</string>
     <string name="supplier_Wong">Wong Sources</string>
     <string name="supplier_Dmit">Dmit Sourcing LLC</string>
+
+    <string name="editor_inser_product_failed">The product did not save</string>
+    <string name="editor_inser_product_success">The product was successfully saved</string>
+
+    <string name="empty_text_copy">from pngtree.com</string>
+    <string name="empty_view_title_text">There are no products. Get started by adding one.</string>
+    <string name="item_missing">One of the fields is not correct. Enter the correct information.</string>
+
+    <string name="add">+</string>
+    <string name="subtract">-</string>
+    <string name="order">order</string>
+    <string name="sale">sale</string>
+
+    <string name="unsaved_changes">Some of your changes have not been saved</string>
+    <string name="loose">You are about to loose your changes</string>
+    <string name="keep_working">Continue making your changes</string>
+
+    <string name="delete_msg">Are you sure you want to delete</string>
+    <string name="delete">Product deleted!</string>
+    <string name="cancel">Cancel changes!</string>
+
+    <string name="delete_inventory_failed">The product inventory deletion failed!</string>
+    <string name="delete_inventory_success">The product inventory deletion success!</string>
 </resources>
