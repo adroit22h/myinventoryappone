@@ -42,7 +42,7 @@ public abstract class EditorActivity extends AppCompatActivity implements Loader
     //phone intent
     String mNumber;
     EditText numberText;
-    AlertDialog alertDialog;
+    AlertDialog alertDialog = builder.create();
 
     /**
      * EditText field to enter the product name
@@ -232,7 +232,7 @@ public abstract class EditorActivity extends AppCompatActivity implements Loader
         }
         finish();
     }
-    AlertDialog alertDialog = builder.create();
+
         private void showUnsavedChangesDialog(DialogInterface.OnClickListener discardButtonClickListener) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage(R.string.unsaved_changes);
@@ -258,14 +258,14 @@ private void showDeletionConfirmationDialog() {
         });
         builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
         });
-        public void onClick (DialogInterface dialog,int id){
+        public void onClick (DialogInterface dialog, int id) {
             if (dialog != null) {
                 dialog.dismiss();
             }
         }
     }
                 alertDialog.show();
-}
+
 
     private void deleteInventory() {
         if (mCurrentInventoryUri != null) {
@@ -321,7 +321,7 @@ private void showDeletionConfirmationDialog() {
                     NavUtils.navigateUpFromSameTask(this);
                     return true;
                 }
-                DialogInterface.onClickListener.discardButtonClickListener = new DialogInterface.OnClickListener() {
+                DialogInterface.OnClickListener.discardButtonClickListener = new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         NavUtils.navigateUpFromSameTask(EditorActivity.this);
@@ -336,7 +336,7 @@ private void showDeletionConfirmationDialog() {
                 super.onBackPressed();
                 return;
             }
-            DialogInterface.onClickListener.discardButtonClickListener = new DialogInterface.OnClickListener() {
+            DialogInterface.OnClickListener.discardButtonClickListener = new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialogInterface, int i) {
                     finish();
@@ -453,7 +453,7 @@ private void showDeletionConfirmationDialog() {
                 startActivity(callIntent);
             }
 
-        });
+        };
 
 
     }
