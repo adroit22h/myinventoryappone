@@ -2,16 +2,15 @@ package com.example.android.myinventoryappone;
 
 //import android.app.LoaderManager;
 
+import android.app.LoaderManager;
 import android.content.ContentValues;
 import android.content.CursorLoader;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.app.LoaderManager;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -29,20 +28,20 @@ import android.widget.Toast;
 
 import data.InventoryContract;
 import data.InventoryContract.InventoryEntry;
-import data.InventoryDbHelper;
 
 
 /**
  * Allows user to create a new product or edit an existing one.
  */
-public abstract class EditorActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
+public class EditorActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
 
     //Identifies the inventory Loader
     private static final int EXISTING_INVENTORY_LOADER = 0;
+
     //phone intent
     String mNumber;
     EditText numberText;
-    AlertDialog alertDialog = builder.create();
+  //  AlertDialog alertDialog = builder.create();
 
     /**
      * EditText field to enter the product name
@@ -72,9 +71,12 @@ public abstract class EditorActivity extends AppCompatActivity implements Loader
      */
     private int mSupplierName = InventoryEntry.SUPPLIER_DMIT;
     //URi for existing inventory loader
+
     private Uri mCurrentInventoryUri;
     //Sets the value to false if no changes have been made to product values
+
     private boolean mInventoryHasChanged = false;
+
     //On Touch Listener
     private View.OnTouchListener mTouchListener = new View.OnTouchListener() {
         @Override
@@ -117,9 +119,7 @@ public abstract class EditorActivity extends AppCompatActivity implements Loader
         mQuantityEditText.setOnTouchListener(mTouchListener);
         mSupplierPhoneEditText.setOnTouchListener(mTouchListener);
         mSupplierNameSpinner.setOnTouchListener(mTouchListener);
-
-
-    }
+   }
 
     /**
      * Setup the dropdown spinner that allows the user to select a supplier.
@@ -172,6 +172,7 @@ public abstract class EditorActivity extends AppCompatActivity implements Loader
         String priceString = mPriceEditText.getText().toString().trim();
         String quantityString = mQuantityEditText.getText().toString().trim();
         String phoneString = mSupplierPhoneEditText.getText().toString().trim();
+        String supplierName = mSupplierNameSpinner.getTag().toString().trim();
         int price = Integer.parseInt(priceString);
         int quantity = Integer.parseInt(quantityString);
         int phone = Integer.parseInt(phoneString);
@@ -182,13 +183,14 @@ public abstract class EditorActivity extends AppCompatActivity implements Loader
                 || TextUtils.isEmpty(phoneString)) {
             Toast.makeText(this, getString(R.string.editor_activity_title_new_product),
                     Toast.LENGTH_LONG).show();
+            return;
         }
 
         // Create database helper
-        InventoryDbHelper mDbHelper = new InventoryDbHelper(this);
+       // InventoryDbHelper mDbHelper = new InventoryDbHelper(this);
 
         // Gets the database in write mode
-        SQLiteDatabase db = mDbHelper.getWritableDatabase();
+       // SQLiteDatabase db = mDbHelper.getWritableDatabase();
 
         // Create a ContentValues object where column names are the keys,
         // and pet attributes from the editor are the values.
@@ -236,7 +238,7 @@ public abstract class EditorActivity extends AppCompatActivity implements Loader
         private void showUnsavedChangesDialog(DialogInterface.OnClickListener discardButtonClickListener) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage(R.string.unsaved_changes);
-        builder.setPositiveButton(R.string.loose, discardButtonClickListener)
+        builder.setPositiveButton(R.string.loose, discardButtonClickListener);
         builder.setNegativeButton(R.string.keep_working, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
                 if (dialog != null) {
@@ -246,34 +248,38 @@ public abstract class EditorActivity extends AppCompatActivity implements Loader
         });
         AlertDialog alertDialog = builder.create();
         alertDialog.show();
-    });
+    }
 
 private void showDeletionConfirmationDialog() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage(R.string.delete_msg);
-        builder.setPositiveButton(R.string.delete, new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int id) {
-                deleteInventory();
-            }
-        });
-        builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-        });
-        public void onClick (DialogInterface dialog, int id) {
+    AlertDialog.Builder builder = new AlertDialog.Builder(this);
+    builder.setMessage(R.string.delete_msg);
+    builder.setPositiveButton(R.string.delete, new DialogInterface.OnClickListener() {
+        public void onClick(DialogInterface dialog, int id) {
+            deleteInventory();
+        }
+    });
+    builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+        @Override
+        public void onClick(DialogInterface dialog, int which) {
             if (dialog != null) {
                 dialog.dismiss();
             }
         }
-    }
-                alertDialog.show();
+    });
+    AlertDialog alertDialog = builder.create();
+    alertDialog.show();
+}
 
 
     private void deleteInventory() {
         if (mCurrentInventoryUri != null) {
             int rowsDeleted = getContentResolver().delete(mCurrentInventoryUri, null, null);
-            //delete message
-            Toast.makeText(this, getString(R.string.delete_inventory_failed), Toast.LENGTH_LONG).show();
-        } else {
-            Toast.makeText(this, getString(R.string.delete_inventory_success), Toast.LENGTH_LONG).show();
+            if (rowsDeleted == 0) {
+                //delete message
+                Toast.makeText(this, getString(R.string.delete_inventory_failed), Toast.LENGTH_LONG).show();
+            } else {
+                Toast.makeText(this, getString(R.string.delete_inventory_success), Toast.LENGTH_LONG).show();
+            }
         }
 
         finish();
@@ -312,7 +318,7 @@ private void showDeletionConfirmationDialog() {
             // Respond to a click on the "Delete" menu option
             case R.id.action_delete:
                 // Do nothing for now
-                //  showDeleteConfirmationDialog();
+                showDeletionConfirmationDialog();
                 return true;
             // Respond to a click on the "Up" arrow button in the app bar
             case android.R.id.home:
@@ -321,22 +327,25 @@ private void showDeletionConfirmationDialog() {
                     NavUtils.navigateUpFromSameTask(this);
                     return true;
                 }
-                DialogInterface.OnClickListener.discardButtonClickListener = new DialogInterface.OnClickListener() {
+                DialogInterface.OnClickListener discardButtonClickListener = new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
+
                         NavUtils.navigateUpFromSameTask(EditorActivity.this);
                     }
                 };
+                showUnsavedChangesDialog(discardButtonClickListener);
+                return true;
+        }
                 return super.onOptionsItemSelected(item);
-
     }
         @Override
-        public void onBackPressed () {
+        public void onBackPressed() {
             if (!mInventoryHasChanged) {
                 super.onBackPressed();
                 return;
             }
-            DialogInterface.OnClickListener.discardButtonClickListener = new DialogInterface.OnClickListener() {
+            DialogInterface.OnClickListener discardButtonClickListener = new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialogInterface, int i) {
                     finish();
@@ -344,11 +353,11 @@ private void showDeletionConfirmationDialog() {
             };
             showUnsavedChangesDialog(discardButtonClickListener);
         }
-    }
+
 
         @Override
-        public Loader<Cursor> onCreateLoader ( int i, Bundle bundle){
-            if (mCurrentInventoryUri == null) {
+        public Loader<Cursor> onCreateLoader(int i, Bundle bundle){
+           if (mCurrentInventoryUri == null) {
                 return null;
             }
 
@@ -374,51 +383,38 @@ private void showDeletionConfirmationDialog() {
 
 
         @Override
-        public void onLoadFinished (Loader < Cursor > loader, Cursor cursor){
+        public void onLoadFinished (Loader < Cursor > loader, Cursor cursor) {
             // mCursorAdapter.swapCursor(data);
-            if (cursor == null || cursor.getcount() < 1) {
+            if (cursor == null || cursor.getCount() < 1) {
                 return;
             }
             if (cursor.moveToFirst()) {
                 int nameColumnIndex = cursor.getColumnIndex(InventoryEntry.COLUMN_PRODUCT_NAME);
                 int priceColumnIndex = cursor.getColumnIndex(InventoryEntry.COLUMN_PRODUCT_PRICE);
                 int quantityColumnIndex = cursor.getColumnIndex(InventoryEntry.COLUMN_QUANTITY);
-                //int suppliernameColumIndex = cursor.getColumIndex(InventoryEntry.COLUMN_SUPPLIER_NAME);
-                int supplierphoneColumIndex = cursor.getColumIndex(InventoryEntry.COLUMN_SUPPLIER_PHONE);
+                int supplierNameColumnIndex = cursor.getColumnIndex(InventoryEntry.COLUMN_SUPPLIER_NAME);
+                int phoneColumnIndex = cursor.getColumnIndex(InventoryEntry.COLUMN_SUPPLIER_PHONE);
 
                 //extracts
                 String name = cursor.getString(nameColumnIndex);
                 int price = cursor.getInt(priceColumnIndex);
                 int quantity = cursor.getInt(quantityColumnIndex);
-                //String suppliername = cursor.getString(suppliernameColumIndex);
-                int supplierphone = cursor.getString(supplierphoneColumIndex);
+                int supplierName = cursor.getInt(supplierNameColumnIndex);
+                int phone = cursor.getInt(phoneColumnIndex);
 
                 //updates
                 mNameEditText.setText(name);
                 mPriceEditText.setText(price);
                 mQuantityEditText.setText(quantity);
-                //mSupplierName.setText(suppliername);
-                //mSupplierNameSpinner.setText(suppliername);
-                mSupplierPhoneEditText.setText(supplierphone);
+                mSupplierNameSpinner.setTag(supplierName);
+                mSupplierPhoneEditText.setText(phone);
             }
-
-        }
-
-        @Override
-        public void onLoaderReset (Loader < Cursor > loader) {
-            //mCursorAdapter.swapCursor(null);
-            mNameEditText.setText("");
-            mPriceEditText.setText("");
-            mQuantityEditText.setText("");
-            mSupplierPhoneEditText.setText("");
-        }
-
-        //add button
-        Button addButton = findViewById(R.id.button_add);
-        addButton.setOnClickListener(new, View.OnClickListener() {
-            @Override
-            public void onClick (View v){
-                int quantity = Interger.valueOf(mQuantityEditText.getText().toString());
+            //add button
+            Button addButton = (Button) findViewById(R.id.button_add);
+            addButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    int quantity = Integer.valueOf(mQuantityEditText.getText().toString());
 
                 if (quantity >= 0) {
                     quantity = quantity + 1;
@@ -427,33 +423,44 @@ private void showDeletionConfirmationDialog() {
             }
         });
 
-        //subtract button
-        Button subtractButton = findViewById(R.id.button_subtract);
-        subtractButton.setOnClickListener(new, View.OnClickListener() {
+    //subtract button
+    Button subtractButton = (Button) findViewById(R.id.button_subtract);
+        subtractButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick (View v){
-                int quantity = Interger.valueOf(mQuantityEditText.getText().toString());
+            public void onClick(View v) {
+                int quantity = Integer.valueOf(mQuantityEditText.getText().toString());
 
-                if (quantity >= 1) {
-                    quantity = quantity - 1;
-                }
-                mQuantityEditText.setText(Integer.toString(quantity));
+            if (quantity >= 1) {
+                quantity = quantity - 1;
             }
-        });
-        //sale button
-        Button orderButton = findViewById(R.id.button_order);
-        numberText = findViewById(R.id.edit_supplier_phone);
+            mQuantityEditText.setText(Integer.toString(quantity));
+        }
+    });
+    //sale button
+    Button orderButton = (Button) findViewById(R.id.button_order);
+    numberText = findViewById(R.id.edit_supplier_phone);
 
-        orderButton.setOnClickListener(new, View.OnClickListener() {
+        orderButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick (View v){
-                mNumber = numberText.getText().toString().trim();
-                Intent callIntent = new Intent(Intent.ACTION_DIAL);
-                callIntent.setData(Uri.parse("phone:" + mNumber));
-                startActivity(callIntent);
-            }
+            public void onClick(View v) {
+               mNumber = numberText.getText().toString().trim();
+            Intent callIntent = new Intent(Intent.ACTION_DIAL);
+            callIntent.setData(Uri.parse("phone:" + mNumber));
+            startActivity(callIntent);
+        }
 
-        };
+    });
+        }
+
+
+        @Override
+        public void onLoaderReset (Loader < Cursor > loader) {
+
+            mNameEditText.setText("");
+            mPriceEditText.setText("");
+            mQuantityEditText.setText("");
+            mSupplierPhoneEditText.setText("");
+        }
 
 
     }

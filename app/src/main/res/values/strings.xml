@@ -41,10 +41,12 @@
     <string name="unsaved_changes">Some of your changes have not been saved</string>
     <string name="loose">You are about to loose your changes</string>
     <string name="keep_working">Continue making your changes</string>
+    <string name="cancel">Oops, changed my mind.</string>
 
     <string name="delete_msg">Are you sure you want to delete</string>
     <string name="delete">Product deleted!</string>
-    <string name="cancel">Cancel changes!</string>
+
+    <string name="price_tba">price to be determined!</string>
 
     <string name="delete_inventory_failed">The product inventory deletion failed!</string>
     <string name="delete_inventory_success">The product inventory deletion success!</string>

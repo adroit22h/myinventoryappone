@@ -14,7 +14,6 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:descendantFocusability="blocksDescendants"
         android:orientation="horizontal">
 
         <!-- Label -->
@@ -28,7 +27,6 @@
             android:layout_width="@dimen/zero"
             android:layout_weight="@dimen/two_weight"
             android:paddingLeft="@dimen/four"
-            android:descendantFocusability="blocksDescendants"
             android:orientation="vertical">
 
             <!-- Name field -->
@@ -57,14 +55,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:padding="@dimen/four"
-            android:descendantFocusability="blocksDescendants"
             android:orientation="horizontal">
             <Button
                 android:id="@+id/button_add"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:focusable="false"
-                android:descendantFocusability="blocksDescendants"
                 android:text="@string/add"/>
 
             <Button
@@ -72,7 +68,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:focusable="false"
-                android:descendantFocusability="blocksDescendants"
                 android:text="@string/subtract"/>
         </LinearLayout>
 
@@ -85,7 +80,6 @@
         android:id="@+id/container_supplierName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:descendantFocusability="blocksDescendants"
         android:orientation="horizontal">
 
         <!-- Label -->
@@ -98,7 +92,6 @@
             android:layout_height="wrap_content"
             android:layout_width="0dp"
             android:layout_weight="2"
-            android:descendantFocusability="blocksDescendants"
             android:orientation="vertical">
 
             <!-- Gender drop-down spinner -->
@@ -116,7 +109,6 @@
         android:id="@+id/container_measurement"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:descendantFocusability="blocksDescendants"
         android:orientation="horizontal">
 
         <!-- Label -->
@@ -143,7 +135,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:focusable="false"
-                android:descendantFocusability="blocksDescendants"
                 android:text="@string/order"
                 android:layout_below="@+id/edit_supplier_phone"
                 android:padding="@dimen/four"
